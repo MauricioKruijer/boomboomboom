@@ -42,6 +42,7 @@ class window.KeyboardController
 				when 86 then window.events.angela.dispatch 'charles'
 				# key: /
 				when 191 then window.events.angela.dispatch 'dance_girl'
+
 				#peaks with up (high) down (low) left (soft) right (hard)
 				when 38 then window.events.peak.dispatch 'hi'
 				when 40 then window.events.peak.dispatch 'lo'

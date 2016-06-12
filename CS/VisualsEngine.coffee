@@ -305,12 +305,13 @@ class window.VisualsEngine
 				offset = 75
 				hang = @convertToRange(@_bpm, [60,600], [200, 80])
 				if @_automatic is true and Math.random() > 0.9
-					photo = Math.ceil Math.random()*4
+					photo = Math.ceil Math.random()*5
 					switch photo
 						when 1 then @showPhoto 'angela'
 						when 2 then @showPhoto 'obama'
 						when 3 then @showPhoto 'queen'
 						when 4 then @showPhoto 'charles'
+						when 5 then @showPhoto 'dance_girl'
 				else if @_automatic is true and Math.random() > 0.5
 					@onBass 'big'
 			else if length is 'short'

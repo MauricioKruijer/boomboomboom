@@ -483,7 +483,7 @@
           offset = 75;
           hang = this.convertToRange(this._bpm, [60, 600], [200, 80]);
           if (this._automatic === true && Math.random() > 0.9) {
-            photo = Math.ceil(Math.random() * 4);
+            photo = Math.ceil(Math.random() * 5);
             switch (photo) {
               case 1:
                 this.showPhoto('angela');
@@ -496,6 +496,9 @@
                 break;
               case 4:
                 this.showPhoto('charles');
+                break;
+              case 5:
+                this.showPhoto('dance_girl');
             }
           } else if (this._automatic === true && Math.random() > 0.5) {
             this.onBass('big');
