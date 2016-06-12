@@ -20,15 +20,15 @@ Development Environment.
 
 	Run Grunt watch:
 
-		grunt
+		node_modules/.bin/grunt
 
 	Compile Coffee:
 
-		grunt coffee
+		node_modules/.bin/grunt coffee
 
 	Compile Stylus
 
-		grunt stylus
+		node_modules/.bin/grunt stylus
 
 4. FOLDER STRUCTURE
 
