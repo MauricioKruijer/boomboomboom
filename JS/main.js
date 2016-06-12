@@ -1,5 +1,5 @@
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   window.AudioAnalysisEngine = (function() {
     var _ticker;
@@ -79,27 +79,27 @@
     AudioAnalysisEngine.prototype._visible = true;
 
     function AudioAnalysisEngine() {
-      this.eventLogger = __bind(this.eventLogger, this);
-      this.calculateAverageVol = __bind(this.calculateAverageVol, this);
-      this.calculateAverageBpm = __bind(this.calculateAverageBpm, this);
-      this.checkForBreak = __bind(this.checkForBreak, this);
-      this.checkForFrequencyVariation = __bind(this.checkForFrequencyVariation, this);
-      this.calculateAveragePeakFrequency = __bind(this.calculateAveragePeakFrequency, this);
-      this.checkForBassPeak = __bind(this.checkForBassPeak, this);
-      this.checkForPeak = __bind(this.checkForPeak, this);
-      this.analyse = __bind(this.analyse, this);
-      this.toggleAuto = __bind(this.toggleAuto, this);
-      this.startAnalysis = __bind(this.startAnalysis, this);
-      this.setupMic = __bind(this.setupMic, this);
-      this.setupFilters = __bind(this.setupFilters, this);
-      this.setupAnalyser = __bind(this.setupAnalyser, this);
-      this.setupListeners = __bind(this.setupListeners, this);
-      var e;
+      this.eventLogger = bind(this.eventLogger, this);
+      this.calculateAverageVol = bind(this.calculateAverageVol, this);
+      this.calculateAverageBpm = bind(this.calculateAverageBpm, this);
+      this.checkForBreak = bind(this.checkForBreak, this);
+      this.checkForFrequencyVariation = bind(this.checkForFrequencyVariation, this);
+      this.calculateAveragePeakFrequency = bind(this.calculateAveragePeakFrequency, this);
+      this.checkForBassPeak = bind(this.checkForBassPeak, this);
+      this.checkForPeak = bind(this.checkForPeak, this);
+      this.analyse = bind(this.analyse, this);
+      this.toggleAuto = bind(this.toggleAuto, this);
+      this.startAnalysis = bind(this.startAnalysis, this);
+      this.setupMic = bind(this.setupMic, this);
+      this.setupFilters = bind(this.setupFilters, this);
+      this.setupAnalyser = bind(this.setupAnalyser, this);
+      this.setupListeners = bind(this.setupListeners, this);
+      var e, error;
       try {
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
         this._context = new window.AudioContext();
-      } catch (_error) {
-        e = _error;
+      } catch (error) {
+        e = error;
         alert('Web Audio Not Supported');
       }
       this.setupAnalyser();
@@ -161,10 +161,10 @@
     };
 
     AudioAnalysisEngine.prototype.analyse = function() {
-      var i, _i, _j, _ref, _ref1, _ref2, _results;
+      var i, j, k, ref, ref1, ref2, results;
       this._analyserNode.getByteFrequencyData(this._frequencyData);
       this._frequencyOfPeak.amp = 0;
-      for (i = _i = 0, _ref = this._frequencyData.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+      for (i = j = 0, ref = this._frequencyData.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
         if (this._frequencyData[i] > this._frequencyOfPeak.amp) {
           this._frequencyOfPeak.freq = this.convertToRange(i, [0, 40], [0, 9]);
           this._frequencyOfPeak.amp = this._frequencyData[i];
@@ -181,8 +181,8 @@
           this.checkForPeak();
         }
       }
-      _results = [];
-      for (i = _j = _ref1 = this._bassCutoff, _ref2 = this._frequencyData.length; _ref1 <= _ref2 ? _j < _ref2 : _j > _ref2; i = _ref1 <= _ref2 ? ++_j : --_j) {
+      results = [];
+      for (i = k = ref1 = this._bassCutoff, ref2 = this._frequencyData.length; ref1 <= ref2 ? k < ref2 : k > ref2; i = ref1 <= ref2 ? ++k : --k) {
         if (i === this._bassCutoff) {
           this._lastBassAverageAmp = this._bassAverageAmp;
           this._bassAverageAmp = 0;
@@ -191,12 +191,12 @@
         if (i === this._frequencyData.length - 1) {
           this._bassAverageAmp = this._bassAverageAmp / (this._frequencyData.length - this._bassCutoff);
           this._bassAverageAmp = Math.ceil(this._bassAverageAmp);
-          _results.push(this.checkForBassPeak());
+          results.push(this.checkForBassPeak());
         } else {
-          _results.push(void 0);
+          results.push(void 0);
         }
       }
-      return _results;
+      return results;
     };
 
     AudioAnalysisEngine.prototype.checkForPeak = function() {
@@ -241,12 +241,12 @@
     };
 
     AudioAnalysisEngine.prototype.calculateAveragePeakFrequency = function() {
-      var i, tempAvFreq, _i, _ref, _results;
+      var i, j, ref, results, tempAvFreq;
       this._averageFreqCalcArray.push(this._frequencyOfPeak.freq);
       if (this._averageFreqCalcArray.length === 10) {
         tempAvFreq = 0;
-        _results = [];
-        for (i = _i = 0, _ref = this._averageFreqCalcArray.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        results = [];
+        for (i = j = 0, ref = this._averageFreqCalcArray.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
           tempAvFreq += this._averageFreqCalcArray[i];
           if (i === this._averageFreqCalcArray.length - 1) {
             tempAvFreq /= this._averageFreqCalcArray.length;
@@ -256,17 +256,17 @@
               window.events.frequency.dispatch(this._averageFrequency);
             }
             this._averageFreqCalcArray = [];
-            _results.push(this._bassCutoff = this._averageFrequency + 3);
+            results.push(this._bassCutoff = this._averageFrequency + 3);
           } else {
-            _results.push(void 0);
+            results.push(void 0);
           }
         }
-        return _results;
+        return results;
       }
     };
 
     AudioAnalysisEngine.prototype.checkForFrequencyVariation = function() {
-      var avDifference, differenceInFreq, i, _i, _ref, _results;
+      var avDifference, differenceInFreq, i, j, ref, results;
       if (!this._frequencyOfPeak.lastFreq) {
         return this._frequencyOfPeak.lastFreq = this._frequencyOfPeak.freq;
       } else {
@@ -274,8 +274,8 @@
         this._frequencyOfPeak.lastFreq = this._frequencyOfPeak.freq;
         this._frequencyVariationCheck.push(differenceInFreq);
         if (this._frequencyVariationCheck.length === 10) {
-          _results = [];
-          for (i = _i = 0, _ref = this._frequencyVariationCheck.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+          results = [];
+          for (i = j = 0, ref = this._frequencyVariationCheck.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
             if (i === 0) {
               avDifference = 0;
             }
@@ -291,15 +291,15 @@
               if (this._lastFrequencyVariation !== this._currentFrequencyVariation) {
                 this.eventLogger("changeFreqVar");
                 window.events.changeFreqVar.dispatch(this._currentFrequencyVariation);
-                _results.push(this._lastFrequencyVariation = this._currentFrequencyVariation);
+                results.push(this._lastFrequencyVariation = this._currentFrequencyVariation);
               } else {
-                _results.push(void 0);
+                results.push(void 0);
               }
             } else {
-              _results.push(void 0);
+              results.push(void 0);
             }
           }
-          return _results;
+          return results;
         }
       }
     };
@@ -345,23 +345,23 @@
     };
 
     AudioAnalysisEngine.prototype.calculateAverageVol = function() {
-      var i, tempAvVol, _i, _ref, _results;
+      var i, j, ref, results, tempAvVol;
       this._volCalcArray.push(this._averageAmp);
       if (this._volCalcArray.length === this._samplesPerSecond) {
         tempAvVol = 0;
-        _results = [];
-        for (i = _i = 0, _ref = this._volCalcArray.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        results = [];
+        for (i = j = 0, ref = this._volCalcArray.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
           tempAvVol += this._volCalcArray[i];
           if (i === this._volCalcArray.length - 1) {
             tempAvVol /= this._volCalcArray.length;
             this._averageVol = Math.floor(tempAvVol);
             window.events.volume.dispatch(this._averageVol);
-            _results.push(this._volCalcArray = []);
+            results.push(this._volCalcArray = []);
           } else {
-            _results.push(void 0);
+            results.push(void 0);
           }
         }
-        return _results;
+        return results;
       }
     };
 
@@ -446,7 +446,7 @@
 }).call(this);
 
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   window.KeyboardController = (function() {
     KeyboardController.prototype._bpmCalcArray = [];
@@ -458,9 +458,9 @@
     KeyboardController.prototype._autoTimer = null;
 
     function KeyboardController() {
-      this.setAutoTimer = __bind(this.setAutoTimer, this);
-      this.getBPM = __bind(this.getBPM, this);
-      this.keydown = __bind(this.keydown, this);
+      this.setAutoTimer = bind(this.setAutoTimer, this);
+      this.getBPM = bind(this.getBPM, this);
+      this.keydown = bind(this.keydown, this);
       window.onkeydown = this.keydown;
     }
 
@@ -504,6 +504,8 @@
             return window.events.angela.dispatch('queen');
           case 86:
             return window.events.angela.dispatch('charles');
+          case 191:
+            return window.events.angela.dispatch('dance_girl');
           case 38:
             return window.events.peak.dispatch('hi');
           case 40:
@@ -564,6 +566,8 @@
             return window.events.transform.dispatch('squashX');
           case 222:
             return window.events.transform.dispatch('squashY');
+          default:
+            return console.log(e.keyCode + ' not used');
         }
       }
     };
@@ -621,7 +625,142 @@
 }).call(this);
 
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var clickContinue, connectIpad, is_chrome, onError, setupMic, showAbout;
+
+  window.stripe = null;
+
+  window.box = null;
+
+  is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+
+  window.focus = true;
+
+  $(window).on('blur', (function(_this) {
+    return function() {
+      return window.focus = false;
+    };
+  })(this));
+
+  $(window).on('focus', (function(_this) {
+    return function() {
+      return window.focus = true;
+    };
+  })(this));
+
+  clickContinue = function() {
+    $('.choice').addClass('downAndOut');
+    $('.accept').removeClass('hidden');
+    setTimeout(function() {
+      return $('.accept').removeClass('offLeft');
+    }, 1500);
+    setTimeout(function() {
+      return $('.accept').addClass('flash');
+    }, 6500);
+    clearInterval(window.box);
+    window.pester = setTimeout(function() {
+      $('#keyboardOrIpad').addClass('hidden');
+      window.events.makeSpecial.dispatch(3);
+      return window.stripe = setInterval(function() {
+        if (window.focus === true) {
+          return window.events.makeSpecial.dispatch(3);
+        }
+      }, 2000);
+    }, 1500);
+    return navigator.webkitGetUserMedia({
+      audio: true
+    }, setupMic, onError);
+  };
+
+  setupMic = function(stream) {
+    clearInterval(window.stripe);
+    clearTimeout(window.pester);
+    $('.accept').addClass('offRight');
+    setTimeout(function() {
+      return $('.accept').addClass('hidden');
+    }, 500);
+    $('#about').removeClass('solidBackground');
+    setTimeout(function() {
+      return $('#instructions').addClass('hidden');
+    }, 500);
+    return window.events.micAccepted.dispatch(stream);
+  };
+
+  onError = function(err) {
+    return console.log('error setting up mic');
+  };
+
+  connectIpad = function() {
+    $('#ipadInstructions').removeClass('hidden');
+    setTimeout(function() {
+      return $('#ipadInstructions').removeClass('upAndAway');
+    }, 666);
+    return window.tabletController = new window.TabletController();
+  };
+
+  showAbout = function() {
+    $('#about').toggleClass('upAndAway');
+    $('#ipadInstructions').toggleClass('faded');
+    return $('.showAbout').toggleClass('aboutOpen');
+  };
+
+  $('.continue').on('touchstart click', clickContinue);
+
+  $('#tablet').on('touchstart click', connectIpad);
+
+  $('.showAbout').on('touchstart click', showAbout);
+
+  $('#makeFullScreen').on('touchstart click', function() {
+    return document.getElementById('fullscreen').webkitRequestFullscreen();
+  });
+
+  $('body').bind('webkitfullscreenchange fullscreenchange', function() {
+    return $('#makeFullScreen').toggleClass('hidden');
+  });
+
+  $((function(_this) {
+    return function() {
+      setTimeout(function() {
+        $('#music').removeClass('hidden');
+        window.events.makeSpecial.dispatch(9);
+        return window.events.makeSpecial.dispatch(11);
+      }, 500);
+      setTimeout(function() {
+        $('#visuals').removeClass('hidden');
+        window.events.makeSpecial.dispatch(9);
+        return window.events.makeSpecial.dispatch(11);
+      }, 1250);
+      setTimeout(function() {
+        $('#play').removeClass('hidden');
+        window.events.makeSpecial.dispatch(9);
+        return window.events.makeSpecial.dispatch(11);
+      }, 2000);
+      setTimeout(function() {
+        $('.instruction').addClass('hidden');
+        return $('#keyboardOrIpad').removeClass('hidden');
+      }, 4000);
+      setTimeout(function() {
+        $('#instructions').addClass('hidden');
+        $('.choice').removeClass('upAndAway');
+        return window.box = setInterval(function() {
+          if (window.focus === true) {
+            return window.events.makeSpecial.dispatch(11);
+          }
+        }, 2000);
+      }, 4800);
+      if (!is_chrome) {
+        return $('#browserNotSupported').removeClass('hidden');
+      } else {
+        window.audioAnalysisEngine = new window.AudioAnalysisEngine();
+        window.visualsEngine = new window.VisualsEngine();
+        return window.keyboardController = new window.KeyboardController();
+      }
+    };
+  })(this));
+
+}).call(this);
+
+(function() {
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   window.TabletController = (function() {
     TabletController.prototype._timeSinceLastKeyPress = 0;
@@ -629,10 +768,10 @@
     TabletController.prototype._autoTimer = null;
 
     function TabletController() {
-      this.setAutoTimer = __bind(this.setAutoTimer, this);
-      this.mapSocketEvents = __bind(this.mapSocketEvents, this);
-      this.onKeyAccepted = __bind(this.onKeyAccepted, this);
-      this.generateKey = __bind(this.generateKey, this);
+      this.setAutoTimer = bind(this.setAutoTimer, this);
+      this.mapSocketEvents = bind(this.mapSocketEvents, this);
+      this.onKeyAccepted = bind(this.onKeyAccepted, this);
+      this.generateKey = bind(this.generateKey, this);
       console.log('setup tablet controller');
       this._socket = io();
       this.generateKey();
@@ -782,7 +921,7 @@
 }).call(this);
 
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   window.VisualsEngine = (function() {
     VisualsEngine.prototype._automatic = true;
@@ -898,34 +1037,34 @@
     VisualsEngine.prototype._squishy = false;
 
     function VisualsEngine() {
-      this.HSVtoRGB = __bind(this.HSVtoRGB, this);
-      this.lerp = __bind(this.lerp, this);
-      this.removeShapes = __bind(this.removeShapes, this);
-      this.animateMiddleGroundFlux = __bind(this.animateMiddleGroundFlux, this);
-      this.lerpBackground = __bind(this.lerpBackground, this);
-      this.onTwoUpdate = __bind(this.onTwoUpdate, this);
-      this.squashShape = __bind(this.squashShape, this);
-      this.squishy = __bind(this.squishy, this);
-      this.showPhoto = __bind(this.showPhoto, this);
-      this.showIllustration = __bind(this.showIllustration, this);
-      this.showText = __bind(this.showText, this);
-      this.makeSpecial = __bind(this.makeSpecial, this);
-      this.makeShape = __bind(this.makeShape, this);
-      this.onBass = __bind(this.onBass, this);
-      this.onBreak = __bind(this.onBreak, this);
-      this.onPeak = __bind(this.onPeak, this);
-      this.onTransform = __bind(this.onTransform, this);
-      this.addFilter = __bind(this.addFilter, this);
-      this.updateBackgroundColour = __bind(this.updateBackgroundColour, this);
-      this.gotVolume = __bind(this.gotVolume, this);
-      this.inverseCols = __bind(this.inverseCols, this);
-      this.onChangeFrequencyVariation = __bind(this.onChangeFrequencyVariation, this);
-      this.gotFrequency = __bind(this.gotFrequency, this);
-      this.onBPMDrop = __bind(this.onBPMDrop, this);
-      this.onBPMJump = __bind(this.onBPMJump, this);
-      this.gotBPM = __bind(this.gotBPM, this);
-      this.toggleAuto = __bind(this.toggleAuto, this);
-      this.setupListeners = __bind(this.setupListeners, this);
+      this.HSVtoRGB = bind(this.HSVtoRGB, this);
+      this.lerp = bind(this.lerp, this);
+      this.removeShapes = bind(this.removeShapes, this);
+      this.animateMiddleGroundFlux = bind(this.animateMiddleGroundFlux, this);
+      this.lerpBackground = bind(this.lerpBackground, this);
+      this.onTwoUpdate = bind(this.onTwoUpdate, this);
+      this.squashShape = bind(this.squashShape, this);
+      this.squishy = bind(this.squishy, this);
+      this.showPhoto = bind(this.showPhoto, this);
+      this.showIllustration = bind(this.showIllustration, this);
+      this.showText = bind(this.showText, this);
+      this.makeSpecial = bind(this.makeSpecial, this);
+      this.makeShape = bind(this.makeShape, this);
+      this.onBass = bind(this.onBass, this);
+      this.onBreak = bind(this.onBreak, this);
+      this.onPeak = bind(this.onPeak, this);
+      this.onTransform = bind(this.onTransform, this);
+      this.addFilter = bind(this.addFilter, this);
+      this.updateBackgroundColour = bind(this.updateBackgroundColour, this);
+      this.gotVolume = bind(this.gotVolume, this);
+      this.inverseCols = bind(this.inverseCols, this);
+      this.onChangeFrequencyVariation = bind(this.onChangeFrequencyVariation, this);
+      this.gotFrequency = bind(this.gotFrequency, this);
+      this.onBPMDrop = bind(this.onBPMDrop, this);
+      this.onBPMJump = bind(this.onBPMJump, this);
+      this.gotBPM = bind(this.gotBPM, this);
+      this.toggleAuto = bind(this.toggleAuto, this);
+      this.setupListeners = bind(this.setupListeners, this);
       console.log('hey, cheeky');
       this.setupListeners();
       this.setupTwoJs();
@@ -1003,7 +1142,7 @@
       var photo;
       this._bpmDropTime = new Date().getTime();
       if (this._automatic === true && Math.random() > 0.82) {
-        photo = Math.ceil(Math.random() * 4);
+        photo = Math.ceil(Math.random() * 5);
         switch (photo) {
           case 1:
             return this.showPhoto('angela');
@@ -1013,6 +1152,8 @@
             return this.showPhoto('queen');
           case 4:
             return this.showPhoto('charles');
+          case 5:
+            return this.showPhoto('dance_girl');
         }
       }
     };
@@ -1052,17 +1193,17 @@
     };
 
     VisualsEngine.prototype.updateColourBucket = function() {
-      var i, sOffset, vOffset, _i, _j, _ref, _ref1, _results, _results1;
+      var i, j, k, ref, ref1, results, results1, sOffset, vOffset;
       if (this._coloursSetup === false) {
         this._coloursSetup = true;
-        _results = [];
-        for (i = _i = 0, _ref = this._baseColours.fg.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-          _results.push(this._colourBucket.fg[i] = Object.create(this._baseColours.fg[i]));
+        results = [];
+        for (i = j = 0, ref = this._baseColours.fg.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+          results.push(this._colourBucket.fg[i] = Object.create(this._baseColours.fg[i]));
         }
-        return _results;
+        return results;
       } else {
-        _results1 = [];
-        for (i = _j = 0, _ref1 = this._colourBucket.fg.length; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; i = 0 <= _ref1 ? ++_j : --_j) {
+        results1 = [];
+        for (i = k = 0, ref1 = this._colourBucket.fg.length; 0 <= ref1 ? k < ref1 : k > ref1; i = 0 <= ref1 ? ++k : --k) {
           sOffset = Math.floor(this.convertToRange(this._frequency, [1, 9], [10, -20]) + Math.floor(this.convertToRange(this._bpm, [60, 600], [-50, 15])));
           vOffset = Math.floor(this.convertToRange(this._frequency, [1, 9], [15, -15]));
           this._colourBucket.fg[i] = Object.create(this._baseColours.fg[i]);
@@ -1070,9 +1211,9 @@
           if (this._colourBucket.fg[i].s < 25) {
             this._colourBucket.fg[i].s = 25;
           }
-          _results1.push(this._colourBucket.fg[i].v -= vOffset);
+          results1.push(this._colourBucket.fg[i].v -= vOffset);
         }
-        return _results1;
+        return results1;
       }
     };
 
@@ -1536,36 +1677,36 @@
     };
 
     VisualsEngine.prototype.squashShape = function() {
-      var copy, shape, v, _i, _len, _ref, _results;
-      _ref = this._shapes;
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        shape = _ref[_i];
+      var copy, j, len, ref, results, shape, v;
+      ref = this._shapes;
+      results = [];
+      for (j = 0, len = ref.length; j < len; j++) {
+        shape = ref[j];
         if (shape.type === 'blob') {
           shape.squashDestination = [];
           shape.squashSpeed = this.convertToRange(this._bpm, [60, 600], [100, 22]) + (Math.random() * 20) - 10;
-          _results.push((function() {
-            var _j, _len1, _ref1, _results1;
-            _ref1 = shape._vertices;
-            _results1 = [];
-            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-              v = _ref1[_j];
+          results.push((function() {
+            var k, len1, ref1, results1;
+            ref1 = shape._vertices;
+            results1 = [];
+            for (k = 0, len1 = ref1.length; k < len1; k++) {
+              v = ref1[k];
               copy = {};
               copy.x = v.x + Math.random() * this._two.width / 6 - this._two.width / 12;
               copy.y = v.y + Math.random() * this._two.width / 6 - this._two.width / 12;
-              _results1.push(shape.squashDestination.push(copy));
+              results1.push(shape.squashDestination.push(copy));
             }
-            return _results1;
+            return results1;
           }).call(this));
         } else {
-          _results.push(void 0);
+          results.push(void 0);
         }
       }
-      return _results;
+      return results;
     };
 
     VisualsEngine.prototype.onTwoUpdate = function() {
-      var i, shape, v, _i, _len, _ref, _results;
+      var i, j, len, ref, results, shape, v;
       if (this._bgColLerp < 1 && this._pauseBgLerp === false) {
         this.lerpBackground();
       }
@@ -1584,31 +1725,31 @@
         this._currentBlur = 0;
         $('#twoMagic svg').css("-webkit-filter", "initial");
       }
-      _ref = this._shapes;
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        shape = _ref[_i];
+      ref = this._shapes;
+      results = [];
+      for (j = 0, len = ref.length; j < len; j++) {
+        shape = ref[j];
         if (shape.squashDestination) {
-          _results.push((function() {
-            var _j, _len1, _ref1, _results1;
-            _ref1 = shape._vertices;
-            _results1 = [];
-            for (i = _j = 0, _len1 = _ref1.length; _j < _len1; i = ++_j) {
-              v = _ref1[i];
+          results.push((function() {
+            var k, len1, ref1, results1;
+            ref1 = shape._vertices;
+            results1 = [];
+            for (i = k = 0, len1 = ref1.length; k < len1; i = ++k) {
+              v = ref1[i];
               if (shape.squashDestination[i]) {
                 v.x += (shape.squashDestination[i].x - v.x) / shape.squashSpeed;
-                _results1.push(v.y += (shape.squashDestination[i].y - v.y) / shape.squashSpeed);
+                results1.push(v.y += (shape.squashDestination[i].y - v.y) / shape.squashSpeed);
               } else {
-                _results1.push(void 0);
+                results1.push(void 0);
               }
             }
-            return _results1;
+            return results1;
           })());
         } else {
-          _results.push(void 0);
+          results.push(void 0);
         }
       }
-      return _results;
+      return results;
     };
 
     VisualsEngine.prototype.lerpBackground = function() {
@@ -1643,12 +1784,12 @@
     };
 
     VisualsEngine.prototype.removeShapes = function() {
-      var i, shape, time, _i, _ref, _results;
+      var i, j, ref, results, shape, time;
       time = new Date().getTime();
-      _ref = this._shapes;
-      _results = [];
-      for (i = _i = _ref.length - 1; _i >= 0; i = _i += -1) {
-        shape = _ref[i];
+      ref = this._shapes;
+      results = [];
+      for (i = j = ref.length - 1; j >= 0; i = j += -1) {
+        shape = ref[i];
         if (shape.lifeSpan) {
           if (time - shape.creationTime >= shape.lifeSpan) {
             if (shape.fadeOut === true) {
@@ -1659,16 +1800,16 @@
               }
               if (shape.opacity < 0) {
                 shape.remove();
-                _results.push(this._shapes.splice(i, 1));
+                results.push(this._shapes.splice(i, 1));
               } else {
-                _results.push(void 0);
+                results.push(void 0);
               }
             } else {
               shape.remove();
-              _results.push(this._shapes.splice(i, 1));
+              results.push(this._shapes.splice(i, 1));
             }
           } else {
-            _results.push(void 0);
+            results.push(void 0);
           }
         } else if (shape.animationSpeed) {
           if (shape.type === 'stripeX') {
@@ -1702,18 +1843,18 @@
             shape.linewidth -= shape.animationSpeed;
             if (shape.linewidth <= 0) {
               shape.remove();
-              _results.push(this._shapes.splice(i, 1));
+              results.push(this._shapes.splice(i, 1));
             } else {
-              _results.push(void 0);
+              results.push(void 0);
             }
           } else {
-            _results.push(void 0);
+            results.push(void 0);
           }
         } else {
-          _results.push(void 0);
+          results.push(void 0);
         }
       }
-      return _results;
+      return results;
     };
 
     VisualsEngine.prototype.lerpColour = function(from, to, control) {
@@ -1841,140 +1982,5 @@
     return VisualsEngine;
 
   })();
-
-}).call(this);
-
-(function() {
-  var clickContinue, connectIpad, is_chrome, onError, setupMic, showAbout;
-
-  window.stripe = null;
-
-  window.box = null;
-
-  is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
-
-  window.focus = true;
-
-  $(window).on('blur', (function(_this) {
-    return function() {
-      return window.focus = false;
-    };
-  })(this));
-
-  $(window).on('focus', (function(_this) {
-    return function() {
-      return window.focus = true;
-    };
-  })(this));
-
-  clickContinue = function() {
-    $('.choice').addClass('downAndOut');
-    $('.accept').removeClass('hidden');
-    setTimeout(function() {
-      return $('.accept').removeClass('offLeft');
-    }, 1500);
-    setTimeout(function() {
-      return $('.accept').addClass('flash');
-    }, 6500);
-    clearInterval(window.box);
-    window.pester = setTimeout(function() {
-      $('#keyboardOrIpad').addClass('hidden');
-      window.events.makeSpecial.dispatch(3);
-      return window.stripe = setInterval(function() {
-        if (window.focus === true) {
-          return window.events.makeSpecial.dispatch(3);
-        }
-      }, 2000);
-    }, 1500);
-    return navigator.webkitGetUserMedia({
-      audio: true
-    }, setupMic, onError);
-  };
-
-  setupMic = function(stream) {
-    clearInterval(window.stripe);
-    clearTimeout(window.pester);
-    $('.accept').addClass('offRight');
-    setTimeout(function() {
-      return $('.accept').addClass('hidden');
-    }, 500);
-    $('#about').removeClass('solidBackground');
-    setTimeout(function() {
-      return $('#instructions').addClass('hidden');
-    }, 500);
-    return window.events.micAccepted.dispatch(stream);
-  };
-
-  onError = function(err) {
-    return console.log('error setting up mic');
-  };
-
-  connectIpad = function() {
-    $('#ipadInstructions').removeClass('hidden');
-    setTimeout(function() {
-      return $('#ipadInstructions').removeClass('upAndAway');
-    }, 666);
-    return window.tabletController = new window.TabletController();
-  };
-
-  showAbout = function() {
-    $('#about').toggleClass('upAndAway');
-    $('#ipadInstructions').toggleClass('faded');
-    return $('.showAbout').toggleClass('aboutOpen');
-  };
-
-  $('.continue').on('touchstart click', clickContinue);
-
-  $('#tablet').on('touchstart click', connectIpad);
-
-  $('.showAbout').on('touchstart click', showAbout);
-
-  $('#makeFullScreen').on('touchstart click', function() {
-    return document.getElementById('fullscreen').webkitRequestFullscreen();
-  });
-
-  $('body').bind('webkitfullscreenchange fullscreenchange', function() {
-    return $('#makeFullScreen').toggleClass('hidden');
-  });
-
-  $((function(_this) {
-    return function() {
-      setTimeout(function() {
-        $('#music').removeClass('hidden');
-        window.events.makeSpecial.dispatch(9);
-        return window.events.makeSpecial.dispatch(11);
-      }, 500);
-      setTimeout(function() {
-        $('#visuals').removeClass('hidden');
-        window.events.makeSpecial.dispatch(9);
-        return window.events.makeSpecial.dispatch(11);
-      }, 1250);
-      setTimeout(function() {
-        $('#play').removeClass('hidden');
-        window.events.makeSpecial.dispatch(9);
-        return window.events.makeSpecial.dispatch(11);
-      }, 2000);
-      setTimeout(function() {
-        $('.instruction').addClass('hidden');
-        return $('#keyboardOrIpad').removeClass('hidden');
-      }, 4000);
-      setTimeout(function() {
-        $('#instructions').addClass('hidden');
-        $('.choice').removeClass('upAndAway');
-        return window.box = setInterval(function() {
-          if (window.focus === true) {
-            return window.events.makeSpecial.dispatch(11);
-          }
-        }, 2000);
-      }, 4800);
-      if (!is_chrome) {
-        return $('#browserNotSupported').removeClass('hidden');
-      } else {
-        window.audioAnalysisEngine = new window.AudioAnalysisEngine();
-        window.visualsEngine = new window.VisualsEngine();
-        return window.keyboardController = new window.KeyboardController();
-      }
-    };
-  })(this));
 
 }).call(this);

@@ -1,5 +1,5 @@
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   window.KeyboardController = (function() {
     KeyboardController.prototype._bpmCalcArray = [];
@@ -11,9 +11,9 @@
     KeyboardController.prototype._autoTimer = null;
 
     function KeyboardController() {
-      this.setAutoTimer = __bind(this.setAutoTimer, this);
-      this.getBPM = __bind(this.getBPM, this);
-      this.keydown = __bind(this.keydown, this);
+      this.setAutoTimer = bind(this.setAutoTimer, this);
+      this.getBPM = bind(this.getBPM, this);
+      this.keydown = bind(this.keydown, this);
       window.onkeydown = this.keydown;
     }
 
@@ -57,6 +57,8 @@
             return window.events.angela.dispatch('queen');
           case 86:
             return window.events.angela.dispatch('charles');
+          case 191:
+            return window.events.angela.dispatch('dance_girl');
           case 38:
             return window.events.peak.dispatch('hi');
           case 40:
@@ -117,6 +119,8 @@
             return window.events.transform.dispatch('squashX');
           case 222:
             return window.events.transform.dispatch('squashY');
+          default:
+            return console.log(e.keyCode + ' not used');
         }
       }
     };

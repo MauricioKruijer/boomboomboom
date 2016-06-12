@@ -1,5 +1,5 @@
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   window.AudioAnalysisEngine = (function() {
     var _ticker;
@@ -79,27 +79,27 @@
     AudioAnalysisEngine.prototype._visible = true;
 
     function AudioAnalysisEngine() {
-      this.eventLogger = __bind(this.eventLogger, this);
-      this.calculateAverageVol = __bind(this.calculateAverageVol, this);
-      this.calculateAverageBpm = __bind(this.calculateAverageBpm, this);
-      this.checkForBreak = __bind(this.checkForBreak, this);
-      this.checkForFrequencyVariation = __bind(this.checkForFrequencyVariation, this);
-      this.calculateAveragePeakFrequency = __bind(this.calculateAveragePeakFrequency, this);
-      this.checkForBassPeak = __bind(this.checkForBassPeak, this);
-      this.checkForPeak = __bind(this.checkForPeak, this);
-      this.analyse = __bind(this.analyse, this);
-      this.toggleAuto = __bind(this.toggleAuto, this);
-      this.startAnalysis = __bind(this.startAnalysis, this);
-      this.setupMic = __bind(this.setupMic, this);
-      this.setupFilters = __bind(this.setupFilters, this);
-      this.setupAnalyser = __bind(this.setupAnalyser, this);
-      this.setupListeners = __bind(this.setupListeners, this);
-      var e;
+      this.eventLogger = bind(this.eventLogger, this);
+      this.calculateAverageVol = bind(this.calculateAverageVol, this);
+      this.calculateAverageBpm = bind(this.calculateAverageBpm, this);
+      this.checkForBreak = bind(this.checkForBreak, this);
+      this.checkForFrequencyVariation = bind(this.checkForFrequencyVariation, this);
+      this.calculateAveragePeakFrequency = bind(this.calculateAveragePeakFrequency, this);
+      this.checkForBassPeak = bind(this.checkForBassPeak, this);
+      this.checkForPeak = bind(this.checkForPeak, this);
+      this.analyse = bind(this.analyse, this);
+      this.toggleAuto = bind(this.toggleAuto, this);
+      this.startAnalysis = bind(this.startAnalysis, this);
+      this.setupMic = bind(this.setupMic, this);
+      this.setupFilters = bind(this.setupFilters, this);
+      this.setupAnalyser = bind(this.setupAnalyser, this);
+      this.setupListeners = bind(this.setupListeners, this);
+      var e, error;
       try {
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
         this._context = new window.AudioContext();
-      } catch (_error) {
-        e = _error;
+      } catch (error) {
+        e = error;
         alert('Web Audio Not Supported');
       }
       this.setupAnalyser();
@@ -161,10 +161,10 @@
     };
 
     AudioAnalysisEngine.prototype.analyse = function() {
-      var i, _i, _j, _ref, _ref1, _ref2, _results;
+      var i, j, k, ref, ref1, ref2, results;
       this._analyserNode.getByteFrequencyData(this._frequencyData);
       this._frequencyOfPeak.amp = 0;
-      for (i = _i = 0, _ref = this._frequencyData.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+      for (i = j = 0, ref = this._frequencyData.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
         if (this._frequencyData[i] > this._frequencyOfPeak.amp) {
           this._frequencyOfPeak.freq = this.convertToRange(i, [0, 40], [0, 9]);
           this._frequencyOfPeak.amp = this._frequencyData[i];
@@ -181,8 +181,8 @@
           this.checkForPeak();
         }
       }
-      _results = [];
-      for (i = _j = _ref1 = this._bassCutoff, _ref2 = this._frequencyData.length; _ref1 <= _ref2 ? _j < _ref2 : _j > _ref2; i = _ref1 <= _ref2 ? ++_j : --_j) {
+      results = [];
+      for (i = k = ref1 = this._bassCutoff, ref2 = this._frequencyData.length; ref1 <= ref2 ? k < ref2 : k > ref2; i = ref1 <= ref2 ? ++k : --k) {
         if (i === this._bassCutoff) {
           this._lastBassAverageAmp = this._bassAverageAmp;
           this._bassAverageAmp = 0;
@@ -191,12 +191,12 @@
         if (i === this._frequencyData.length - 1) {
           this._bassAverageAmp = this._bassAverageAmp / (this._frequencyData.length - this._bassCutoff);
           this._bassAverageAmp = Math.ceil(this._bassAverageAmp);
-          _results.push(this.checkForBassPeak());
+          results.push(this.checkForBassPeak());
         } else {
-          _results.push(void 0);
+          results.push(void 0);
         }
       }
-      return _results;
+      return results;
     };
 
     AudioAnalysisEngine.prototype.checkForPeak = function() {
@@ -241,12 +241,12 @@
     };
 
     AudioAnalysisEngine.prototype.calculateAveragePeakFrequency = function() {
-      var i, tempAvFreq, _i, _ref, _results;
+      var i, j, ref, results, tempAvFreq;
       this._averageFreqCalcArray.push(this._frequencyOfPeak.freq);
       if (this._averageFreqCalcArray.length === 10) {
         tempAvFreq = 0;
-        _results = [];
-        for (i = _i = 0, _ref = this._averageFreqCalcArray.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        results = [];
+        for (i = j = 0, ref = this._averageFreqCalcArray.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
           tempAvFreq += this._averageFreqCalcArray[i];
           if (i === this._averageFreqCalcArray.length - 1) {
             tempAvFreq /= this._averageFreqCalcArray.length;
@@ -256,17 +256,17 @@
               window.events.frequency.dispatch(this._averageFrequency);
             }
             this._averageFreqCalcArray = [];
-            _results.push(this._bassCutoff = this._averageFrequency + 3);
+            results.push(this._bassCutoff = this._averageFrequency + 3);
           } else {
-            _results.push(void 0);
+            results.push(void 0);
           }
         }
-        return _results;
+        return results;
       }
     };
 
     AudioAnalysisEngine.prototype.checkForFrequencyVariation = function() {
-      var avDifference, differenceInFreq, i, _i, _ref, _results;
+      var avDifference, differenceInFreq, i, j, ref, results;
       if (!this._frequencyOfPeak.lastFreq) {
         return this._frequencyOfPeak.lastFreq = this._frequencyOfPeak.freq;
       } else {
@@ -274,8 +274,8 @@
         this._frequencyOfPeak.lastFreq = this._frequencyOfPeak.freq;
         this._frequencyVariationCheck.push(differenceInFreq);
         if (this._frequencyVariationCheck.length === 10) {
-          _results = [];
-          for (i = _i = 0, _ref = this._frequencyVariationCheck.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+          results = [];
+          for (i = j = 0, ref = this._frequencyVariationCheck.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
             if (i === 0) {
               avDifference = 0;
             }
@@ -291,15 +291,15 @@
               if (this._lastFrequencyVariation !== this._currentFrequencyVariation) {
                 this.eventLogger("changeFreqVar");
                 window.events.changeFreqVar.dispatch(this._currentFrequencyVariation);
-                _results.push(this._lastFrequencyVariation = this._currentFrequencyVariation);
+                results.push(this._lastFrequencyVariation = this._currentFrequencyVariation);
               } else {
-                _results.push(void 0);
+                results.push(void 0);
               }
             } else {
-              _results.push(void 0);
+              results.push(void 0);
             }
           }
-          return _results;
+          return results;
         }
       }
     };
@@ -345,23 +345,23 @@
     };
 
     AudioAnalysisEngine.prototype.calculateAverageVol = function() {
-      var i, tempAvVol, _i, _ref, _results;
+      var i, j, ref, results, tempAvVol;
       this._volCalcArray.push(this._averageAmp);
       if (this._volCalcArray.length === this._samplesPerSecond) {
         tempAvVol = 0;
-        _results = [];
-        for (i = _i = 0, _ref = this._volCalcArray.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        results = [];
+        for (i = j = 0, ref = this._volCalcArray.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
           tempAvVol += this._volCalcArray[i];
           if (i === this._volCalcArray.length - 1) {
             tempAvVol /= this._volCalcArray.length;
             this._averageVol = Math.floor(tempAvVol);
             window.events.volume.dispatch(this._averageVol);
-            _results.push(this._volCalcArray = []);
+            results.push(this._volCalcArray = []);
           } else {
-            _results.push(void 0);
+            results.push(void 0);
           }
         }
-        return _results;
+        return results;
       }
     };
 

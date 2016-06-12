@@ -1,5 +1,5 @@
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   window.VisualsEngine = (function() {
     VisualsEngine.prototype._automatic = true;
@@ -115,34 +115,34 @@
     VisualsEngine.prototype._squishy = false;
 
     function VisualsEngine() {
-      this.HSVtoRGB = __bind(this.HSVtoRGB, this);
-      this.lerp = __bind(this.lerp, this);
-      this.removeShapes = __bind(this.removeShapes, this);
-      this.animateMiddleGroundFlux = __bind(this.animateMiddleGroundFlux, this);
-      this.lerpBackground = __bind(this.lerpBackground, this);
-      this.onTwoUpdate = __bind(this.onTwoUpdate, this);
-      this.squashShape = __bind(this.squashShape, this);
-      this.squishy = __bind(this.squishy, this);
-      this.showPhoto = __bind(this.showPhoto, this);
-      this.showIllustration = __bind(this.showIllustration, this);
-      this.showText = __bind(this.showText, this);
-      this.makeSpecial = __bind(this.makeSpecial, this);
-      this.makeShape = __bind(this.makeShape, this);
-      this.onBass = __bind(this.onBass, this);
-      this.onBreak = __bind(this.onBreak, this);
-      this.onPeak = __bind(this.onPeak, this);
-      this.onTransform = __bind(this.onTransform, this);
-      this.addFilter = __bind(this.addFilter, this);
-      this.updateBackgroundColour = __bind(this.updateBackgroundColour, this);
-      this.gotVolume = __bind(this.gotVolume, this);
-      this.inverseCols = __bind(this.inverseCols, this);
-      this.onChangeFrequencyVariation = __bind(this.onChangeFrequencyVariation, this);
-      this.gotFrequency = __bind(this.gotFrequency, this);
-      this.onBPMDrop = __bind(this.onBPMDrop, this);
-      this.onBPMJump = __bind(this.onBPMJump, this);
-      this.gotBPM = __bind(this.gotBPM, this);
-      this.toggleAuto = __bind(this.toggleAuto, this);
-      this.setupListeners = __bind(this.setupListeners, this);
+      this.HSVtoRGB = bind(this.HSVtoRGB, this);
+      this.lerp = bind(this.lerp, this);
+      this.removeShapes = bind(this.removeShapes, this);
+      this.animateMiddleGroundFlux = bind(this.animateMiddleGroundFlux, this);
+      this.lerpBackground = bind(this.lerpBackground, this);
+      this.onTwoUpdate = bind(this.onTwoUpdate, this);
+      this.squashShape = bind(this.squashShape, this);
+      this.squishy = bind(this.squishy, this);
+      this.showPhoto = bind(this.showPhoto, this);
+      this.showIllustration = bind(this.showIllustration, this);
+      this.showText = bind(this.showText, this);
+      this.makeSpecial = bind(this.makeSpecial, this);
+      this.makeShape = bind(this.makeShape, this);
+      this.onBass = bind(this.onBass, this);
+      this.onBreak = bind(this.onBreak, this);
+      this.onPeak = bind(this.onPeak, this);
+      this.onTransform = bind(this.onTransform, this);
+      this.addFilter = bind(this.addFilter, this);
+      this.updateBackgroundColour = bind(this.updateBackgroundColour, this);
+      this.gotVolume = bind(this.gotVolume, this);
+      this.inverseCols = bind(this.inverseCols, this);
+      this.onChangeFrequencyVariation = bind(this.onChangeFrequencyVariation, this);
+      this.gotFrequency = bind(this.gotFrequency, this);
+      this.onBPMDrop = bind(this.onBPMDrop, this);
+      this.onBPMJump = bind(this.onBPMJump, this);
+      this.gotBPM = bind(this.gotBPM, this);
+      this.toggleAuto = bind(this.toggleAuto, this);
+      this.setupListeners = bind(this.setupListeners, this);
       console.log('hey, cheeky');
       this.setupListeners();
       this.setupTwoJs();
@@ -220,7 +220,7 @@
       var photo;
       this._bpmDropTime = new Date().getTime();
       if (this._automatic === true && Math.random() > 0.82) {
-        photo = Math.ceil(Math.random() * 4);
+        photo = Math.ceil(Math.random() * 5);
         switch (photo) {
           case 1:
             return this.showPhoto('angela');
@@ -230,6 +230,8 @@
             return this.showPhoto('queen');
           case 4:
             return this.showPhoto('charles');
+          case 5:
+            return this.showPhoto('dance_girl');
         }
       }
     };
@@ -269,17 +271,17 @@
     };
 
     VisualsEngine.prototype.updateColourBucket = function() {
-      var i, sOffset, vOffset, _i, _j, _ref, _ref1, _results, _results1;
+      var i, j, k, ref, ref1, results, results1, sOffset, vOffset;
       if (this._coloursSetup === false) {
         this._coloursSetup = true;
-        _results = [];
-        for (i = _i = 0, _ref = this._baseColours.fg.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-          _results.push(this._colourBucket.fg[i] = Object.create(this._baseColours.fg[i]));
+        results = [];
+        for (i = j = 0, ref = this._baseColours.fg.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+          results.push(this._colourBucket.fg[i] = Object.create(this._baseColours.fg[i]));
         }
-        return _results;
+        return results;
       } else {
-        _results1 = [];
-        for (i = _j = 0, _ref1 = this._colourBucket.fg.length; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; i = 0 <= _ref1 ? ++_j : --_j) {
+        results1 = [];
+        for (i = k = 0, ref1 = this._colourBucket.fg.length; 0 <= ref1 ? k < ref1 : k > ref1; i = 0 <= ref1 ? ++k : --k) {
           sOffset = Math.floor(this.convertToRange(this._frequency, [1, 9], [10, -20]) + Math.floor(this.convertToRange(this._bpm, [60, 600], [-50, 15])));
           vOffset = Math.floor(this.convertToRange(this._frequency, [1, 9], [15, -15]));
           this._colourBucket.fg[i] = Object.create(this._baseColours.fg[i]);
@@ -287,9 +289,9 @@
           if (this._colourBucket.fg[i].s < 25) {
             this._colourBucket.fg[i].s = 25;
           }
-          _results1.push(this._colourBucket.fg[i].v -= vOffset);
+          results1.push(this._colourBucket.fg[i].v -= vOffset);
         }
-        return _results1;
+        return results1;
       }
     };
 
@@ -753,36 +755,36 @@
     };
 
     VisualsEngine.prototype.squashShape = function() {
-      var copy, shape, v, _i, _len, _ref, _results;
-      _ref = this._shapes;
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        shape = _ref[_i];
+      var copy, j, len, ref, results, shape, v;
+      ref = this._shapes;
+      results = [];
+      for (j = 0, len = ref.length; j < len; j++) {
+        shape = ref[j];
         if (shape.type === 'blob') {
           shape.squashDestination = [];
           shape.squashSpeed = this.convertToRange(this._bpm, [60, 600], [100, 22]) + (Math.random() * 20) - 10;
-          _results.push((function() {
-            var _j, _len1, _ref1, _results1;
-            _ref1 = shape._vertices;
-            _results1 = [];
-            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-              v = _ref1[_j];
+          results.push((function() {
+            var k, len1, ref1, results1;
+            ref1 = shape._vertices;
+            results1 = [];
+            for (k = 0, len1 = ref1.length; k < len1; k++) {
+              v = ref1[k];
               copy = {};
               copy.x = v.x + Math.random() * this._two.width / 6 - this._two.width / 12;
               copy.y = v.y + Math.random() * this._two.width / 6 - this._two.width / 12;
-              _results1.push(shape.squashDestination.push(copy));
+              results1.push(shape.squashDestination.push(copy));
             }
-            return _results1;
+            return results1;
           }).call(this));
         } else {
-          _results.push(void 0);
+          results.push(void 0);
         }
       }
-      return _results;
+      return results;
     };
 
     VisualsEngine.prototype.onTwoUpdate = function() {
-      var i, shape, v, _i, _len, _ref, _results;
+      var i, j, len, ref, results, shape, v;
       if (this._bgColLerp < 1 && this._pauseBgLerp === false) {
         this.lerpBackground();
       }
@@ -801,31 +803,31 @@
         this._currentBlur = 0;
         $('#twoMagic svg').css("-webkit-filter", "initial");
       }
-      _ref = this._shapes;
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        shape = _ref[_i];
+      ref = this._shapes;
+      results = [];
+      for (j = 0, len = ref.length; j < len; j++) {
+        shape = ref[j];
         if (shape.squashDestination) {
-          _results.push((function() {
-            var _j, _len1, _ref1, _results1;
-            _ref1 = shape._vertices;
-            _results1 = [];
-            for (i = _j = 0, _len1 = _ref1.length; _j < _len1; i = ++_j) {
-              v = _ref1[i];
+          results.push((function() {
+            var k, len1, ref1, results1;
+            ref1 = shape._vertices;
+            results1 = [];
+            for (i = k = 0, len1 = ref1.length; k < len1; i = ++k) {
+              v = ref1[i];
               if (shape.squashDestination[i]) {
                 v.x += (shape.squashDestination[i].x - v.x) / shape.squashSpeed;
-                _results1.push(v.y += (shape.squashDestination[i].y - v.y) / shape.squashSpeed);
+                results1.push(v.y += (shape.squashDestination[i].y - v.y) / shape.squashSpeed);
               } else {
-                _results1.push(void 0);
+                results1.push(void 0);
               }
             }
-            return _results1;
+            return results1;
           })());
         } else {
-          _results.push(void 0);
+          results.push(void 0);
         }
       }
-      return _results;
+      return results;
     };
 
     VisualsEngine.prototype.lerpBackground = function() {
@@ -860,12 +862,12 @@
     };
 
     VisualsEngine.prototype.removeShapes = function() {
-      var i, shape, time, _i, _ref, _results;
+      var i, j, ref, results, shape, time;
       time = new Date().getTime();
-      _ref = this._shapes;
-      _results = [];
-      for (i = _i = _ref.length - 1; _i >= 0; i = _i += -1) {
-        shape = _ref[i];
+      ref = this._shapes;
+      results = [];
+      for (i = j = ref.length - 1; j >= 0; i = j += -1) {
+        shape = ref[i];
         if (shape.lifeSpan) {
           if (time - shape.creationTime >= shape.lifeSpan) {
             if (shape.fadeOut === true) {
@@ -876,16 +878,16 @@
               }
               if (shape.opacity < 0) {
                 shape.remove();
-                _results.push(this._shapes.splice(i, 1));
+                results.push(this._shapes.splice(i, 1));
               } else {
-                _results.push(void 0);
+                results.push(void 0);
               }
             } else {
               shape.remove();
-              _results.push(this._shapes.splice(i, 1));
+              results.push(this._shapes.splice(i, 1));
             }
           } else {
-            _results.push(void 0);
+            results.push(void 0);
           }
         } else if (shape.animationSpeed) {
           if (shape.type === 'stripeX') {
@@ -919,18 +921,18 @@
             shape.linewidth -= shape.animationSpeed;
             if (shape.linewidth <= 0) {
               shape.remove();
-              _results.push(this._shapes.splice(i, 1));
+              results.push(this._shapes.splice(i, 1));
             } else {
-              _results.push(void 0);
+              results.push(void 0);
             }
           } else {
-            _results.push(void 0);
+            results.push(void 0);
           }
         } else {
-          _results.push(void 0);
+          results.push(void 0);
         }
       }
-      return _results;
+      return results;
     };
 
     VisualsEngine.prototype.lerpColour = function(from, to, control) {

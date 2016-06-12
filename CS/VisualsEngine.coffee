@@ -112,12 +112,13 @@ class window.VisualsEngine
 	onBPMDrop: () =>
 		@_bpmDropTime = new Date().getTime()
 		if @_automatic is true and Math.random() > 0.82
-			photo = Math.ceil Math.random()*4
+			photo = Math.ceil Math.random()*5
 			switch photo
 				when 1 then @showPhoto 'angela'
 				when 2 then @showPhoto 'obama'
 				when 3 then @showPhoto 'queen'
 				when 4 then @showPhoto 'charles'
+				when 5 then @showPhoto 'dance_girl'
 
 
 	gotFrequency: (freq) =>

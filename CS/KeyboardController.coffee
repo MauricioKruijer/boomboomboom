@@ -32,10 +32,16 @@ class window.KeyboardController
 				when 78 then window.events.bass.dispatch 'small'
 				when 66 then window.events.bass.dispatch 'big'
 				#angela
+				# key: z
 				when 90 then window.events.angela.dispatch 'angela'
+				# key: x
 				when 88 then window.events.angela.dispatch 'obama'
+				# key: c
 				when 67 then window.events.angela.dispatch 'queen'
+				# key: v
 				when 86 then window.events.angela.dispatch 'charles'
+				# key: /
+				when 191 then window.events.angela.dispatch 'dance_girl'
 				#peaks with up (high) down (low) left (soft) right (hard)
 				when 38 then window.events.peak.dispatch 'hi'
 				when 40 then window.events.peak.dispatch 'lo'
@@ -73,6 +79,7 @@ class window.KeyboardController
 				#transform
 				when 186 then window.events.transform.dispatch 'squashX'
 				when 222 then window.events.transform.dispatch 'squashY'
+				else console.log e.keyCode + ' not used'
 
 	#now disabled. but manual way of settign Bpm
 	getBPM: () =>

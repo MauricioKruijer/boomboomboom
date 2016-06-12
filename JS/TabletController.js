@@ -1,5 +1,5 @@
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   window.TabletController = (function() {
     TabletController.prototype._timeSinceLastKeyPress = 0;
@@ -7,10 +7,10 @@
     TabletController.prototype._autoTimer = null;
 
     function TabletController() {
-      this.setAutoTimer = __bind(this.setAutoTimer, this);
-      this.mapSocketEvents = __bind(this.mapSocketEvents, this);
-      this.onKeyAccepted = __bind(this.onKeyAccepted, this);
-      this.generateKey = __bind(this.generateKey, this);
+      this.setAutoTimer = bind(this.setAutoTimer, this);
+      this.mapSocketEvents = bind(this.mapSocketEvents, this);
+      this.onKeyAccepted = bind(this.onKeyAccepted, this);
+      this.generateKey = bind(this.generateKey, this);
       console.log('setup tablet controller');
       this._socket = io();
       this.generateKey();
