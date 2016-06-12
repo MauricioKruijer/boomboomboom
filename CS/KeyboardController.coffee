@@ -70,6 +70,9 @@ class window.KeyboardController
 				when 74 then window.events.showIllustration.dispatch 'ear'
 				when 75 then window.events.showIllustration.dispatch 'eye'
 				when 76 then window.events.showIllustration.dispatch 'mouth'
+				# key: \
+				when 220 then window.events.showIllustration.dispatch 'diamond'
+
 				#filters
 				when 32 then window.events.squishy.dispatch()
 				when 77 then window.events.filter.dispatch 'blur'

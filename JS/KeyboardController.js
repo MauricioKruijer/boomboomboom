@@ -107,6 +107,8 @@
             return window.events.showIllustration.dispatch('eye');
           case 76:
             return window.events.showIllustration.dispatch('mouth');
+          case 220:
+            return window.events.showIllustration.dispatch('diamond');
           case 32:
             return window.events.squishy.dispatch();
           case 77:

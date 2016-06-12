@@ -255,14 +255,15 @@ class window.VisualsEngine
 
 		#make shapes if there's been a BPM jump recently. the duration should be set in bpm jump method
 		if @_automatic is true
-			if @_shapes.length < 5 and Math.random() > 0.9
-				illu = Math.ceil Math.random()*5
+			if @_shapes.length < 6 and Math.random() > 0.9
+				illu = Math.ceil Math.random()*6
 				switch illu
 					when 1 then @showIllustration 'heart'
 					when 2 then @showIllustration 'hand'
 					when 3 then @showIllustration 'mouth'
 					when 4 then @showIllustration 'eye'
 					when 5 then @showIllustration 'ear'
+					when 6 then @showIllustration 'diamond'
 
 			if type is 'hard' or type is 'soft'
 				if Math.random() > 0.94
@@ -467,38 +468,8 @@ class window.VisualsEngine
 		if @_illustrationTimer
 			clearTimeout @_illustrationTimer
 		hang = @convertToRange(@_bpm, [60,600], [200, 75])
-		switch which
-			when 'hand'
-				elem = "#hand"
-				$("#heart").removeClass 'show'
-				$("#mouth").removeClass 'show'
-				$("#eye").removeClass 'show'
-				$("#ear").removeClass 'show'
-			when 'heart'
-				elem = "#heart"
-				$("#hand").removeClass 'show'
-				$("#mouth").removeClass 'show'
-				$("#eye").removeClass 'show'
-				$("#ear").removeClass 'show'
-			when 'ear'
-				elem = "#ear"
-				$("#hand").removeClass 'show'
-				$("#heart").removeClass 'show'
-				$("#eye").removeClass 'show'
-				$("#mouth").removeClass 'show'
-			when 'eye'
-				elem = "#eye"
-				$("#hand").removeClass 'show'
-				$("#heart").removeClass 'show'
-				$("#ear").removeClass 'show'
-				$("#mouth").removeClass 'show'
-			when 'mouth'
-				elem = "#mouth"
-				$("#hand").removeClass 'show'
-				$("#heart").removeClass 'show'
-				$("#eye").removeClass 'show'
-				$("#ear").removeClass 'show'
-
+		$("#illus > img.show").removeClass 'show'
+		elem = '#' + which
 
 		$(elem).addClass 'show'
 		@_illustrationTimer = setTimeout =>

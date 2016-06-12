@@ -554,6 +554,8 @@
             return window.events.showIllustration.dispatch('eye');
           case 76:
             return window.events.showIllustration.dispatch('mouth');
+          case 220:
+            return window.events.showIllustration.dispatch('diamond');
           case 32:
             return window.events.squishy.dispatch();
           case 77:
@@ -1332,8 +1334,8 @@
       circle.type = 'blob';
       this._shapes.push(circle);
       if (this._automatic === true) {
-        if (this._shapes.length < 5 && Math.random() > 0.9) {
-          illu = Math.ceil(Math.random() * 5);
+        if (this._shapes.length < 6 && Math.random() > 0.9) {
+          illu = Math.ceil(Math.random() * 6);
           switch (illu) {
             case 1:
               this.showIllustration('heart');
@@ -1349,6 +1351,9 @@
               break;
             case 5:
               this.showIllustration('ear');
+              break;
+            case 6:
+              this.showIllustration('diamond');
           }
         }
         if (type === 'hard' || type === 'soft') {
@@ -1603,42 +1608,8 @@
         clearTimeout(this._illustrationTimer);
       }
       hang = this.convertToRange(this._bpm, [60, 600], [200, 75]);
-      switch (which) {
-        case 'hand':
-          elem = "#hand";
-          $("#heart").removeClass('show');
-          $("#mouth").removeClass('show');
-          $("#eye").removeClass('show');
-          $("#ear").removeClass('show');
-          break;
-        case 'heart':
-          elem = "#heart";
-          $("#hand").removeClass('show');
-          $("#mouth").removeClass('show');
-          $("#eye").removeClass('show');
-          $("#ear").removeClass('show');
-          break;
-        case 'ear':
-          elem = "#ear";
-          $("#hand").removeClass('show');
-          $("#heart").removeClass('show');
-          $("#eye").removeClass('show');
-          $("#mouth").removeClass('show');
-          break;
-        case 'eye':
-          elem = "#eye";
-          $("#hand").removeClass('show');
-          $("#heart").removeClass('show');
-          $("#ear").removeClass('show');
-          $("#mouth").removeClass('show');
-          break;
-        case 'mouth':
-          elem = "#mouth";
-          $("#hand").removeClass('show');
-          $("#heart").removeClass('show');
-          $("#eye").removeClass('show');
-          $("#ear").removeClass('show');
-      }
+      $("#illus > img.show").removeClass('show');
+      elem = '#' + which;
       $(elem).addClass('show');
       return this._illustrationTimer = setTimeout((function(_this) {
         return function() {
