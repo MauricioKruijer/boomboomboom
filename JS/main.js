@@ -506,6 +506,8 @@
             return window.events.angela.dispatch('charles');
           case 191:
             return window.events.angela.dispatch('dance_girl');
+          case 192:
+            return window.events.angela.dispatch('dance_girl2');
           case 38:
             return window.events.peak.dispatch('hi');
           case 40:
@@ -1144,7 +1146,7 @@
       var photo;
       this._bpmDropTime = new Date().getTime();
       if (this._automatic === true && Math.random() > 0.82) {
-        photo = Math.ceil(Math.random() * 5);
+        photo = Math.ceil(Math.random() * 6);
         switch (photo) {
           case 1:
             return this.showPhoto('angela');
@@ -1156,6 +1158,8 @@
             return this.showPhoto('charles');
           case 5:
             return this.showPhoto('dance_girl');
+          case 6:
+            return this.showPhoto('dance_girl2');
         }
       }
     };

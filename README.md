@@ -93,3 +93,6 @@ Development Environment.
 
 
 
+# More notes
+Use the base64 form an image to use it in the Styl files. Easiest way to get the base64 encoding is by running this command in Terminal:
+`openssl base64 < name_of_your_image.gif | tr -d '\n' | pbcopy`

@@ -220,7 +220,7 @@
       var photo;
       this._bpmDropTime = new Date().getTime();
       if (this._automatic === true && Math.random() > 0.82) {
-        photo = Math.ceil(Math.random() * 5);
+        photo = Math.ceil(Math.random() * 6);
         switch (photo) {
           case 1:
             return this.showPhoto('angela');
@@ -232,6 +232,8 @@
             return this.showPhoto('charles');
           case 5:
             return this.showPhoto('dance_girl');
+          case 6:
+            return this.showPhoto('dance_girl2');
         }
       }
     };

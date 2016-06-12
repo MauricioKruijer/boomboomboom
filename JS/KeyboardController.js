@@ -59,6 +59,8 @@
             return window.events.angela.dispatch('charles');
           case 191:
             return window.events.angela.dispatch('dance_girl');
+          case 192:
+            return window.events.angela.dispatch('dance_girl2');
           case 38:
             return window.events.peak.dispatch('hi');
           case 40:
