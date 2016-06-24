@@ -33,6 +33,8 @@ class window.KeyboardController
 				when 66 then window.events.bass.dispatch 'big'
 				#angela
 				# key: z
+				when 90
+					window.events.showVideo.dispatch()
 				when 90 then window.events.angela.dispatch 'angela'
 				# key: x
 				when 88 then window.events.angela.dispatch 'obama'

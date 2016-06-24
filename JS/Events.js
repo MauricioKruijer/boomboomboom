@@ -23,7 +23,8 @@
     filter: new Signal(),
     transform: new Signal(),
     angela: new Signal(),
-    squishy: new Signal()
+    squishy: new Signal(),
+    showVideo: new Signal()
   };
 
 }).call(this);

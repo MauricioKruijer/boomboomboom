@@ -440,7 +440,8 @@
     filter: new Signal(),
     transform: new Signal(),
     angela: new Signal(),
-    squishy: new Signal()
+    squishy: new Signal(),
+    showVideo: new Signal()
   };
 
 }).call(this);
@@ -496,6 +497,8 @@
             return window.events.bass.dispatch('small');
           case 66:
             return window.events.bass.dispatch('big');
+          case 90:
+            return window.events.showVideo.dispatch();
           case 90:
             return window.events.angela.dispatch('angela');
           case 88:
@@ -1076,6 +1079,7 @@
       this.onTwoUpdate = bind(this.onTwoUpdate, this);
       this.squashShape = bind(this.squashShape, this);
       this.squishy = bind(this.squishy, this);
+      this.showVideo = bind(this.showVideo, this);
       this.showPhoto = bind(this.showPhoto, this);
       this.showIllustration = bind(this.showIllustration, this);
       this.showText = bind(this.showText, this);
@@ -1170,12 +1174,14 @@
       window.events.changeFreqVar.add(this.onChangeFrequencyVariation);
       window.events.transform.add(this.onTransform);
       window.events.squishy.add(this.squishy);
-      return window.events.automatic.add(this.toggleAuto);
+      window.events.automatic.add(this.toggleAuto);
+      return window.events.showVideo.add(this.showVideo);
     };
 
     VisualsEngine.prototype.setupTwoJs = function() {
       var params;
       this._twoElem = document.getElementById('twoMagic');
+      this._videoElem = document.getElementById('videos');
       params = {
         fullscreen: true,
         autostart: true
@@ -1456,11 +1462,13 @@
         g = this._bgColCurrent.g + offset;
         b = this._bgColCurrent.b + offset;
         col = "rgb(" + r + "," + g + "," + b + ")";
-        this._twoElem.style.background = col;
+        this._videoElem.style.background = col;
+        this._twoElem.style.background = 'transparent';
         clearTimeout(breakTimer);
         return breakTimer = setTimeout((function(_this) {
           return function() {
-            _this._twoElem.style.background = "rgb(" + _this._bgColCurrent.r + "," + _this._bgColCurrent.g + "," + _this._bgColCurrent.b + ")";
+            _this._videoElem.style.background = col;
+            _this._twoElem.style.background = 'transparent';
             return _this._pauseBgLerp = false;
           };
         })(this), hang);
@@ -1644,6 +1652,33 @@
       }
     };
 
+    VisualsEngine.prototype.showVideo = function() {
+      var player, randomVideo, video, videos;
+      videos = [];
+      $('video').each(function(i) {
+        return videos.push($(this).attr('class'));
+      });
+      randomVideo = this.getRandomValueFromObject(videos);
+      console.log('Show Video ' + randomVideo);
+      video = $("." + randomVideo);
+      video.show();
+      if (video.data('ontop')) {
+        $("#videos").css({
+          'z-index': 500
+        });
+      }
+      player = video.get(0);
+      player.play();
+      return player.addEventListener('ended', function() {
+        $(this).hide();
+        if (video.data('ontop')) {
+          return $("#videos").css({
+            'z-index': 1
+          });
+        }
+      });
+    };
+
     VisualsEngine.prototype.squishy = function() {
       this.squashShape();
       this._squishy = true;
@@ -1736,7 +1771,7 @@
       this._bgColLerp += this._bgColLerpSpeed;
       this._bgColCurrent = this.lerpColour(this._bgColFrom, this._bgColTo, this._bgColLerp);
       col = "rgb(" + this._bgColCurrent.r + "," + this._bgColCurrent.g + "," + this._bgColCurrent.b + ")";
-      return this._twoElem.style.background = col;
+      return this._videoElem.style.background = col;
     };
 
     VisualsEngine.prototype.animateMiddleGroundFlux = function() {

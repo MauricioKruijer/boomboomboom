@@ -22,4 +22,5 @@ window.events = {
 	transform: new Signal()
 	angela: new Signal()
 	squishy: new Signal()
+	showVideo: new Signal()
 }

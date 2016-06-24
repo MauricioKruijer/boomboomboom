@@ -123,10 +123,12 @@ class window.VisualsEngine
 		window.events.transform.add @onTransform
 		window.events.squishy.add @squishy
 		window.events.automatic.add @toggleAuto
+		window.events.showVideo.add @showVideo
 
 
 	setupTwoJs: ->
 		@_twoElem = document.getElementById 'twoMagic'
+		@_videoElem = document.getElementById 'videos'
 		params = {
 			fullscreen: true
 			autostart: true
@@ -349,10 +351,12 @@ class window.VisualsEngine
 			g = @_bgColCurrent.g + offset
 			b = @_bgColCurrent.b + offset
 			col = "rgb("+r+","+g+","+b+")"
-			@_twoElem.style.background = col
+			@_videoElem.style.background = col
+			@_twoElem.style.background = 'transparent'
 			clearTimeout breakTimer
 			breakTimer = setTimeout =>
-				@_twoElem.style.background = "rgb("+@_bgColCurrent.r+","+@_bgColCurrent.g+","+@_bgColCurrent.b+")"
+				@_videoElem.style.background = col
+				@_twoElem.style.background = 'transparent'
 				@_pauseBgLerp = false
 			, hang
 
@@ -507,6 +511,34 @@ class window.VisualsEngine
 				$('#photo').removeClass which
 			, 2500
 
+	showVideo: =>
+		videos = []
+
+		$('video').each (i) ->
+			videos.push $(this).attr('class')
+
+		randomVideo = @getRandomValueFromObject(videos)
+		console.log 'Show Video ' + randomVideo
+
+		video = $(".#{randomVideo}")
+		video.show()
+
+		if video.data('ontop')
+			$("#videos").css(
+				'z-index': 500
+			)
+
+		player = video.get 0
+
+		player.play()
+		player.addEventListener('ended', () ->
+			$(this).hide()
+
+			if video.data('ontop')
+				$("#videos").css(
+					'z-index': 1
+				)
+		)
 
 	squishy: =>
 		@squashShape()
@@ -556,7 +588,7 @@ class window.VisualsEngine
 		@_bgColLerp  += @_bgColLerpSpeed
 		@_bgColCurrent = @lerpColour @_bgColFrom, @_bgColTo, @_bgColLerp
 		col = "rgb("+@_bgColCurrent.r+","+@_bgColCurrent.g+","+@_bgColCurrent.b+")"
-		@_twoElem.style.background = col
+		@_videoElem.style.background = col
 
 	#the bulge
 	animateMiddleGroundFlux: () =>

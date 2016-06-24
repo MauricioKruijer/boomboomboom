@@ -50,6 +50,8 @@
           case 66:
             return window.events.bass.dispatch('big');
           case 90:
+            return window.events.showVideo.dispatch();
+          case 90:
             return window.events.angela.dispatch('angela');
           case 88:
             return window.events.angela.dispatch('obama');
