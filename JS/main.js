@@ -1598,6 +1598,7 @@
 
     VisualsEngine.prototype.showText = function(which) {
       var elem, hang;
+      return;
       console.log('showText ' + which);
       if (this._textTimer) {
         clearTimeout(this._textTimer);

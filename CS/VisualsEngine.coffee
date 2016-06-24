@@ -466,6 +466,8 @@ class window.VisualsEngine
 	
 	#the large text oevr the visuals
 	showText: (which) =>
+		return
+
 		console.log 'showText ' + which
 		if @_textTimer
 			clearTimeout @_textTimer
