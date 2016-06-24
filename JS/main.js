@@ -928,6 +928,8 @@
   var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   window.VisualsEngine = (function() {
+    var illustrations, photos, texts;
+
     VisualsEngine.prototype._automatic = true;
 
     VisualsEngine.prototype._visible = true;
@@ -1040,6 +1042,31 @@
 
     VisualsEngine.prototype._squishy = false;
 
+    texts = {
+      '65': 'boom',
+      '68': 'wobb',
+      '70': 'clap',
+      '83': 'tssk'
+    };
+
+    photos = {
+      '67': 'queen',
+      '86': 'charles',
+      '88': 'obama',
+      '90': 'angela',
+      '191': 'dance_girl',
+      '192': 'dance_girl2'
+    };
+
+    illustrations = {
+      '71': 'hand',
+      '72': 'heart',
+      '74': 'ear',
+      '75': 'eye',
+      '76': 'mouth',
+      '220': 'diamond'
+    };
+
     function VisualsEngine() {
       this.HSVtoRGB = bind(this.HSVtoRGB, this);
       this.lerp = bind(this.lerp, this);
@@ -1069,6 +1096,7 @@
       this.gotBPM = bind(this.gotBPM, this);
       this.toggleAuto = bind(this.toggleAuto, this);
       this.setupListeners = bind(this.setupListeners, this);
+      this.getKeyFromObjectByValue = bind(this.getKeyFromObjectByValue, this);
       console.log('hey, cheeky');
       this.setupListeners();
       this.setupTwoJs();
@@ -1084,6 +1112,44 @@
         };
       })(this));
     }
+
+    VisualsEngine.prototype.getKeyFromObjectByValue = function(needle, haystack) {
+      var key, value;
+      for (key in haystack) {
+        value = haystack[key];
+        if (("" + needle) === value) {
+          return key;
+        }
+      }
+      return false;
+    };
+
+    VisualsEngine.prototype.getValueFromSortedObject = function(key, object) {
+      var i, item, k;
+      i = 0;
+      for (k in object) {
+        item = object[k];
+        i++;
+        if (i === key) {
+          return item;
+        }
+      }
+    };
+
+    VisualsEngine.prototype.size = function(obj) {
+      var item, size;
+      size = 0;
+      for (item in obj) {
+        size++;
+      }
+      return size;
+    };
+
+    VisualsEngine.prototype.getRandomValueFromObject = function(obj) {
+      var getRandomNumberBetweenOneAndMaxItemsInObject;
+      getRandomNumberBetweenOneAndMaxItemsInObject = Math.ceil(Math.random() * this.size(obj));
+      return this.getValueFromSortedObject(getRandomNumberBetweenOneAndMaxItemsInObject, obj);
+    };
 
     VisualsEngine.prototype.setupListeners = function() {
       window.events.peak.add(this.onPeak);
@@ -1143,24 +1209,10 @@
     };
 
     VisualsEngine.prototype.onBPMDrop = function() {
-      var photo;
       this._bpmDropTime = new Date().getTime();
       if (this._automatic === true && Math.random() > 0.82) {
-        photo = Math.ceil(Math.random() * 6);
-        switch (photo) {
-          case 1:
-            return this.showPhoto('angela');
-          case 2:
-            return this.showPhoto('obama');
-          case 3:
-            return this.showPhoto('queen');
-          case 4:
-            return this.showPhoto('charles');
-          case 5:
-            return this.showPhoto('dance_girl');
-          case 6:
-            return this.showPhoto('dance_girl2');
-        }
+        console.log('onBPMDrop triggered');
+        return this.showPhoto(this.getRandomValueFromObject(photos));
       }
     };
 
@@ -1199,7 +1251,7 @@
     };
 
     VisualsEngine.prototype.updateColourBucket = function() {
-      var i, j, k, ref, ref1, results, results1, sOffset, vOffset;
+      var i, j, l, ref, ref1, results, results1, sOffset, vOffset;
       if (this._coloursSetup === false) {
         this._coloursSetup = true;
         results = [];
@@ -1209,7 +1261,7 @@
         return results;
       } else {
         results1 = [];
-        for (i = k = 0, ref1 = this._colourBucket.fg.length; 0 <= ref1 ? k < ref1 : k > ref1; i = 0 <= ref1 ? ++k : --k) {
+        for (i = l = 0, ref1 = this._colourBucket.fg.length; 0 <= ref1 ? l < ref1 : l > ref1; i = 0 <= ref1 ? ++l : --l) {
           sOffset = Math.floor(this.convertToRange(this._frequency, [1, 9], [10, -20]) + Math.floor(this.convertToRange(this._bpm, [60, 600], [-50, 15])));
           vOffset = Math.floor(this.convertToRange(this._frequency, [1, 9], [15, -15]));
           this._colourBucket.fg[i] = Object.create(this._baseColours.fg[i]);
@@ -1270,7 +1322,7 @@
     };
 
     VisualsEngine.prototype.onPeak = function(type) {
-      var circle, col, duration, illu, peakTime, v, whichCol;
+      var circle, col, duration, peakTime, v, whichCol;
       this._peakCount++;
       peakTime = new Date().getTime();
       if (this._squishy === true) {
@@ -1339,26 +1391,7 @@
       this._shapes.push(circle);
       if (this._automatic === true) {
         if (this._shapes.length < 6 && Math.random() > 0.9) {
-          illu = Math.ceil(Math.random() * 6);
-          switch (illu) {
-            case 1:
-              this.showIllustration('heart');
-              break;
-            case 2:
-              this.showIllustration('hand');
-              break;
-            case 3:
-              this.showIllustration('mouth');
-              break;
-            case 4:
-              this.showIllustration('eye');
-              break;
-            case 5:
-              this.showIllustration('ear');
-              break;
-            case 6:
-              this.showIllustration('diamond');
-          }
+          this.showIllustration(this.getRandomValueFromObject(illustrations));
         }
         if (type === 'hard' || type === 'soft') {
           if (Math.random() > 0.94) {
@@ -1397,7 +1430,7 @@
     };
 
     VisualsEngine.prototype.onBreak = function(length) {
-      var b, breakTimer, col, g, hang, offset, photo, r;
+      var b, breakTimer, col, g, hang, offset, r;
       if (this._pauseBgLerp === false) {
         this._pauseBgLerp = true;
         if (this._automatic === true && Math.random() > 0.9) {
@@ -1411,23 +1444,7 @@
           offset = 75;
           hang = this.convertToRange(this._bpm, [60, 600], [200, 80]);
           if (this._automatic === true && Math.random() > 0.9) {
-            photo = Math.ceil(Math.random() * 5);
-            switch (photo) {
-              case 1:
-                this.showPhoto('angela');
-                break;
-              case 2:
-                this.showPhoto('obama');
-                break;
-              case 3:
-                this.showPhoto('queen');
-                break;
-              case 4:
-                this.showPhoto('charles');
-                break;
-              case 5:
-                this.showPhoto('dance_girl');
-            }
+            this.showPhoto(this.getRandomValueFromObject(photos));
           } else if (this._automatic === true && Math.random() > 0.5) {
             this.onBass('big');
           }
@@ -1572,75 +1589,59 @@
 
     VisualsEngine.prototype.showText = function(which) {
       var elem, hang;
+      console.log('showText ' + which);
       if (this._textTimer) {
         clearTimeout(this._textTimer);
       }
       hang = this.convertToRange(this._bpm, [60, 600], [1500, 800]);
-      switch (which) {
-        case 'boom':
-          elem = "#boom";
-          $("#tssk").removeClass('show');
-          $("#wobb").removeClass('show');
-          $("#clap").removeClass('show');
-          break;
-        case 'tssk':
-          elem = "#tssk";
-          $("#boom").removeClass('show');
-          $("#wobb").removeClass('show');
-          $("#clap").removeClass('show');
-          break;
-        case 'wobb':
-          elem = "#wobb";
-          $("#boom").removeClass('show');
-          $("#tssk").removeClass('show');
-          $("#clap").removeClass('show');
-          break;
-        case 'clap':
-          elem = "#clap";
-          $("#boom").removeClass('show');
-          $("#wobb").removeClass('show');
-          $("#tssk").removeClass('show');
+      if (this.getKeyFromObjectByValue(which, texts)) {
+        elem = "#" + which;
+        $("#text > span.show").removeClass('show');
+        $(elem).addClass('show');
+        return this._textTimer = setTimeout((function(_this) {
+          return function() {
+            return $("#text .show").removeClass('show');
+          };
+        })(this), hang);
       }
-      $(elem).addClass('show');
-      return this._textTimer = setTimeout((function(_this) {
-        return function() {
-          return $("#text .show").removeClass('show');
-        };
-      })(this), hang);
     };
 
     VisualsEngine.prototype.showIllustration = function(which) {
       var elem, hang;
+      console.log('showIllustration ' + which);
       if (this._illustrationTimer) {
         clearTimeout(this._illustrationTimer);
       }
       hang = this.convertToRange(this._bpm, [60, 600], [200, 75]);
-      $("#illus > img.show").removeClass('show');
-      elem = '#' + which;
-      $(elem).addClass('show');
-      return this._illustrationTimer = setTimeout((function(_this) {
-        return function() {
-          return $("#illus .show").removeClass('show');
-        };
-      })(this), hang);
+      if (this.getKeyFromObjectByValue(which, illustrations)) {
+        elem = '#' + which;
+        $("#illus > img.show").removeClass('show');
+        $(elem).addClass('show');
+        return this._illustrationTimer = setTimeout((function(_this) {
+          return function() {
+            return $("#illus .show").removeClass('show');
+          };
+        })(this), hang);
+      }
     };
 
     VisualsEngine.prototype.showPhoto = function(which) {
-      $('#photo').removeClass();
-      $('#photo').addClass(which);
-      $('#photo').addClass('show');
-      clearTimeout(this._angelaTimer);
-      clearTimeout(this._angelaTimer2);
-      this._angelaTimer = setTimeout((function(_this) {
-        return function() {
-          return $('#photo').removeClass('show');
-        };
-      })(this), 2000);
-      return this._angelaTimer2 = setTimeout((function(_this) {
-        return function() {
-          return $('#photo').removeClass(which);
-        };
-      })(this), 2500);
+      console.log('showPhoto ' + which);
+      if (this.getKeyFromObjectByValue(which, photos)) {
+        $('#photo').removeClass().addClass(which + " show");
+        clearTimeout(this._angelaTimer);
+        clearTimeout(this._angelaTimer2);
+        this._angelaTimer = setTimeout((function(_this) {
+          return function() {
+            return $('#photo').removeClass('show');
+          };
+        })(this), 2000);
+        return this._angelaTimer2 = setTimeout((function(_this) {
+          return function() {
+            return $('#photo').removeClass(which);
+          };
+        })(this), 2500);
+      }
     };
 
     VisualsEngine.prototype.squishy = function() {
@@ -1664,11 +1665,11 @@
           shape.squashDestination = [];
           shape.squashSpeed = this.convertToRange(this._bpm, [60, 600], [100, 22]) + (Math.random() * 20) - 10;
           results.push((function() {
-            var k, len1, ref1, results1;
+            var l, len1, ref1, results1;
             ref1 = shape._vertices;
             results1 = [];
-            for (k = 0, len1 = ref1.length; k < len1; k++) {
-              v = ref1[k];
+            for (l = 0, len1 = ref1.length; l < len1; l++) {
+              v = ref1[l];
               copy = {};
               copy.x = v.x + Math.random() * this._two.width / 6 - this._two.width / 12;
               copy.y = v.y + Math.random() * this._two.width / 6 - this._two.width / 12;
@@ -1709,10 +1710,10 @@
         shape = ref[j];
         if (shape.squashDestination) {
           results.push((function() {
-            var k, len1, ref1, results1;
+            var l, len1, ref1, results1;
             ref1 = shape._vertices;
             results1 = [];
-            for (i = k = 0, len1 = ref1.length; k < len1; i = ++k) {
+            for (i = l = 0, len1 = ref1.length; l < len1; i = ++l) {
               v = ref1[i];
               if (shape.squashDestination[i]) {
                 v.x += (shape.squashDestination[i].x - v.x) / shape.squashSpeed;

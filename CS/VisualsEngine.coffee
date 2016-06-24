@@ -41,7 +41,28 @@ class window.VisualsEngine
 	_currentBlur: 0
 	_squishy: false
 
-	
+	texts =
+		'65': 'boom'
+		'68': 'wobb'
+		'70': 'clap'
+		'83': 'tssk'
+
+	photos =
+		'67': 'queen'
+		'86': 'charles'
+		'88': 'obama'
+		'90': 'angela'
+		'191': 'dance_girl'
+		'192': 'dance_girl2'
+
+	illustrations =
+		'71': 'hand'
+		'72': 'heart'
+		'74': 'ear'
+		'75': 'eye'
+		'76': 'mouth'
+		'220': 'diamond'
+
 	constructor: ->
 		console.log 'hey, cheeky'
 		@setupListeners()
@@ -53,7 +74,33 @@ class window.VisualsEngine
 			@_visible = false
 		$(window).on 'focus', =>
 			@_visible = true
-		
+
+#		Helpers =======================================
+
+	getKeyFromObjectByValue: (needle, haystack) =>
+		for key, value of haystack
+			if "#{needle}" is value
+				return key
+		return false
+
+	getValueFromSortedObject: (key, object) ->
+		i = 0
+		for k, item of object
+			i++
+			if i is key
+				return item
+
+	size: (obj) ->
+		size = 0
+		for item of obj
+			size++
+		return size
+
+	getRandomValueFromObject: (obj) ->
+		getRandomNumberBetweenOneAndMaxItemsInObject = Math.ceil Math.random() * @size(obj)
+		return @getValueFromSortedObject(getRandomNumberBetweenOneAndMaxItemsInObject, obj)
+
+#		Helpers end ===================================
 
 	#listeners
 	setupListeners: =>
@@ -112,15 +159,8 @@ class window.VisualsEngine
 	onBPMDrop: () =>
 		@_bpmDropTime = new Date().getTime()
 		if @_automatic is true and Math.random() > 0.82
-			photo = Math.ceil Math.random()*6
-			switch photo
-				when 1 then @showPhoto 'angela'
-				when 2 then @showPhoto 'obama'
-				when 3 then @showPhoto 'queen'
-				when 4 then @showPhoto 'charles'
-				when 5 then @showPhoto 'dance_girl'
-				when 6 then @showPhoto 'dance_girl2'
-
+			console.log 'onBPMDrop triggered'
+			@showPhoto @getRandomValueFromObject(photos)
 
 	gotFrequency: (freq) =>
 		@_frequency = freq
@@ -257,14 +297,7 @@ class window.VisualsEngine
 		#make shapes if there's been a BPM jump recently. the duration should be set in bpm jump method
 		if @_automatic is true
 			if @_shapes.length < 6 and Math.random() > 0.9
-				illu = Math.ceil Math.random()*6
-				switch illu
-					when 1 then @showIllustration 'heart'
-					when 2 then @showIllustration 'hand'
-					when 3 then @showIllustration 'mouth'
-					when 4 then @showIllustration 'eye'
-					when 5 then @showIllustration 'ear'
-					when 6 then @showIllustration 'diamond'
+				@showIllustration @getRandomValueFromObject(illustrations)
 
 			if type is 'hard' or type is 'soft'
 				if Math.random() > 0.94
@@ -306,13 +339,7 @@ class window.VisualsEngine
 				offset = 75
 				hang = @convertToRange(@_bpm, [60,600], [200, 80])
 				if @_automatic is true and Math.random() > 0.9
-					photo = Math.ceil Math.random()*5
-					switch photo
-						when 1 then @showPhoto 'angela'
-						when 2 then @showPhoto 'obama'
-						when 3 then @showPhoto 'queen'
-						when 4 then @showPhoto 'charles'
-						when 5 then @showPhoto 'dance_girl'
+					@showPhoto @getRandomValueFromObject(photos)
 				else if @_automatic is true and Math.random() > 0.5
 					@onBass 'big'
 			else if length is 'short'
@@ -434,65 +461,51 @@ class window.VisualsEngine
 	
 	#the large text oevr the visuals
 	showText: (which) =>
+		console.log 'showText ' + which
 		if @_textTimer
 			clearTimeout @_textTimer
 		hang = @convertToRange(@_bpm, [60,600], [1500, 800])
-		switch which
-			when 'boom'
-				elem = "#boom"
-				$("#tssk").removeClass 'show'
-				$("#wobb").removeClass 'show'
-				$("#clap").removeClass 'show'
-			when 'tssk'
-				elem = "#tssk"
-				$("#boom").removeClass 'show'
-				$("#wobb").removeClass 'show'
-				$("#clap").removeClass 'show'
-			when 'wobb'
-				elem = "#wobb"
-				$("#boom").removeClass 'show'
-				$("#tssk").removeClass 'show'
-				$("#clap").removeClass 'show'
-			when 'clap'
-				elem = "#clap"
-				$("#boom").removeClass 'show'
-				$("#wobb").removeClass 'show'
-				$("#tssk").removeClass 'show'
+		if @getKeyFromObjectByValue(which, texts)
+			elem = "#" + which
 
+			$("#text > span.show").removeClass 'show'
+			$(elem).addClass 'show'
 
-		$(elem).addClass 'show'
-		@_textTimer = setTimeout =>
-			$("#text .show").removeClass 'show'
-		, hang
+			@_textTimer = setTimeout =>
+				$("#text .show").removeClass 'show'
+			, hang
 
 	#the illustations
 	showIllustration: (which) =>
+		console.log 'showIllustration ' + which
 		if @_illustrationTimer
 			clearTimeout @_illustrationTimer
 		hang = @convertToRange(@_bpm, [60,600], [200, 75])
-		$("#illus > img.show").removeClass 'show'
-		elem = '#' + which
+		if @getKeyFromObjectByValue(which, illustrations)
+			elem = '#' + which
 
-		$(elem).addClass 'show'
-		@_illustrationTimer = setTimeout =>
-			$("#illus .show").removeClass 'show'
-		, hang
+			$("#illus > img.show").removeClass 'show'
+			$(elem).addClass 'show'
+
+			@_illustrationTimer = setTimeout =>
+				$("#illus .show").removeClass 'show'
+			, hang
 
 	#the photos
 	showPhoto: (which) =>
-		$('#photo').removeClass()
+		console.log 'showPhoto ' + which
+		if @getKeyFromObjectByValue(which, photos)
+			$('#photo').removeClass().addClass "#{which} show"
 
-		$('#photo').addClass which
-		$('#photo').addClass 'show'
-		clearTimeout @_angelaTimer
-		clearTimeout @_angelaTimer2
+			clearTimeout @_angelaTimer
+			clearTimeout @_angelaTimer2
 
-		@_angelaTimer = setTimeout =>
-			$('#photo').removeClass 'show'
-		, 2000
-		@_angelaTimer2 = setTimeout =>
-			$('#photo').removeClass which
-		, 2500
+			@_angelaTimer = setTimeout =>
+				$('#photo').removeClass 'show'
+			, 2000
+			@_angelaTimer2 = setTimeout =>
+				$('#photo').removeClass which
+			, 2500
 
 
 	squishy: =>
