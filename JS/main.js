@@ -1218,6 +1218,7 @@
       this._bpmDropTime = new Date().getTime();
       if (this._automatic === true && Math.random() > 0.82) {
         console.log('onBPMDrop triggered');
+        this.showVideo();
         return this.showPhoto(this.getRandomValueFromObject(photos));
       }
     };

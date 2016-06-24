@@ -162,6 +162,7 @@ class window.VisualsEngine
 		@_bpmDropTime = new Date().getTime()
 		if @_automatic is true and Math.random() > 0.82
 			console.log 'onBPMDrop triggered'
+			@showVideo()
 			@showPhoto @getRandomValueFromObject(photos)
 
 	gotFrequency: (freq) =>
