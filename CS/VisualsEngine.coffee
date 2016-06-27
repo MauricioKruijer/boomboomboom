@@ -486,6 +486,7 @@ class window.VisualsEngine
 	#the illustations
 	showIllustration: (which) =>
 		console.log 'showIllustration ' + which
+		return
 		if @_illustrationTimer
 			clearTimeout @_illustrationTimer
 		hang = @convertToRange(@_bpm, [60,600], [200, 75])

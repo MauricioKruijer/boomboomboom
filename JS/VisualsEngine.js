@@ -689,6 +689,7 @@
     VisualsEngine.prototype.showIllustration = function(which) {
       var elem, hang;
       console.log('showIllustration ' + which);
+      return;
       if (this._illustrationTimer) {
         clearTimeout(this._illustrationTimer);
       }
