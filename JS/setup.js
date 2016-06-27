@@ -77,9 +77,7 @@
     return $('.showAbout').toggleClass('aboutOpen');
   };
 
-  $('.continue').on('touchstart click', clickContinue);
-
-  $('#tablet').on('touchstart click', connectIpad);
+  clickContinue();
 
   $('.showAbout').on('touchstart click', showAbout);
 
@@ -93,34 +91,6 @@
 
   $((function(_this) {
     return function() {
-      setTimeout(function() {
-        $('#music').removeClass('hidden');
-        window.events.makeSpecial.dispatch(9);
-        return window.events.makeSpecial.dispatch(11);
-      }, 500);
-      setTimeout(function() {
-        $('#visuals').removeClass('hidden');
-        window.events.makeSpecial.dispatch(9);
-        return window.events.makeSpecial.dispatch(11);
-      }, 1250);
-      setTimeout(function() {
-        $('#play').removeClass('hidden');
-        window.events.makeSpecial.dispatch(9);
-        return window.events.makeSpecial.dispatch(11);
-      }, 2000);
-      setTimeout(function() {
-        $('.instruction').addClass('hidden');
-        return $('#keyboardOrIpad').removeClass('hidden');
-      }, 4000);
-      setTimeout(function() {
-        $('#instructions').addClass('hidden');
-        $('.choice').removeClass('upAndAway');
-        return window.box = setInterval(function() {
-          if (window.focus === true) {
-            return window.events.makeSpecial.dispatch(11);
-          }
-        }, 2000);
-      }, 4800);
       if (!is_chrome) {
         return $('#browserNotSupported').removeClass('hidden');
       } else {

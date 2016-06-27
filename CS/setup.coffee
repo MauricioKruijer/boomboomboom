@@ -70,8 +70,7 @@ showAbout = () ->
 	$('.showAbout').toggleClass 'aboutOpen'
 	
 
-$('.continue').on 'touchstart click', clickContinue
-$('#tablet').on 'touchstart click', connectIpad
+clickContinue()
 $('.showAbout').on 'touchstart click', showAbout
 $('#makeFullScreen').on 'touchstart click', () ->
 	document.getElementById('fullscreen').webkitRequestFullscreen()
@@ -82,37 +81,37 @@ $('body').bind 'webkitfullscreenchange fullscreenchange', () ->
 
 $ =>
 	
-	setTimeout () ->
-		$('#music').removeClass 'hidden'
-		window.events.makeSpecial.dispatch 9
-		window.events.makeSpecial.dispatch 11
-	,500
-
-	setTimeout () ->
-		$('#visuals').removeClass 'hidden'
-		window.events.makeSpecial.dispatch 9
-		window.events.makeSpecial.dispatch 11
-	,1250
-
-	setTimeout () ->
-		$('#play').removeClass 'hidden'
-		window.events.makeSpecial.dispatch 9
-		window.events.makeSpecial.dispatch 11
-	,2000
-
-	setTimeout () ->
-		$('.instruction').addClass 'hidden'
-		$('#keyboardOrIpad').removeClass 'hidden'
-	,4000
-
-	setTimeout () ->
-		$('#instructions').addClass 'hidden'
-		$('.choice').removeClass 'upAndAway'
-		window.box = setInterval () ->
-			if window.focus is true
-				window.events.makeSpecial.dispatch 11
-		,2000
-	,4800
+#	setTimeout () ->
+#		$('#music').removeClass 'hidden'
+#		window.events.makeSpecial.dispatch 9
+#		window.events.makeSpecial.dispatch 11
+#	,500
+#
+#	setTimeout () ->
+#		$('#visuals').removeClass 'hidden'
+#		window.events.makeSpecial.dispatch 9
+#		window.events.makeSpecial.dispatch 11
+#	,1250
+#
+#	setTimeout () ->
+#		$('#play').removeClass 'hidden'
+#		window.events.makeSpecial.dispatch 9
+#		window.events.makeSpecial.dispatch 11
+#	,2000
+#
+#	setTimeout () ->
+#		$('.instruction').addClass 'hidden'
+#		$('#keyboardOrIpad').removeClass 'hidden'
+#	,4000
+#
+#	setTimeout () ->
+#		$('#instructions').addClass 'hidden'
+#		$('.choice').removeClass 'upAndAway'
+#		window.box = setInterval () ->
+#			if window.focus is true
+#				window.events.makeSpecial.dispatch 11
+#		,2000
+#	,4800
 
 
 	if !is_chrome
