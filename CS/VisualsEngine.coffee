@@ -163,7 +163,7 @@ class window.VisualsEngine
 		if @_automatic is true and Math.random() > 0.82
 			console.log 'onBPMDrop triggered'
 			@showVideo()
-			@showPhoto @getRandomValueFromObject(photos)
+#			@showPhoto @getRandomValueFromObject(photos)
 
 	gotFrequency: (freq) =>
 		@_frequency = freq
@@ -342,7 +342,8 @@ class window.VisualsEngine
 				offset = 75
 				hang = @convertToRange(@_bpm, [60,600], [200, 80])
 				if @_automatic is true and Math.random() > 0.9
-					@showPhoto @getRandomValueFromObject(photos)
+#					@showPhoto @getRandomValueFromObject(photos)
+					@showVideo()
 				else if @_automatic is true and Math.random() > 0.5
 					@onBass 'big'
 			else if length is 'short'

@@ -289,8 +289,7 @@
       this._bpmDropTime = new Date().getTime();
       if (this._automatic === true && Math.random() > 0.82) {
         console.log('onBPMDrop triggered');
-        this.showVideo();
-        return this.showPhoto(this.getRandomValueFromObject(photos));
+        return this.showVideo();
       }
     };
 
@@ -522,7 +521,7 @@
           offset = 75;
           hang = this.convertToRange(this._bpm, [60, 600], [200, 80]);
           if (this._automatic === true && Math.random() > 0.9) {
-            this.showPhoto(this.getRandomValueFromObject(photos));
+            this.showVideo();
           } else if (this._automatic === true && Math.random() > 0.5) {
             this.onBass('big');
           }
